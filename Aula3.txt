@@ -1,0 +1,55 @@
+    1  git init
+    2  ls
+    3  cd .git
+    4  cd ./.git
+    5  cd .git/
+    6  cd ./.git
+    7   git
+    8  code .
+    9  cd ..
+   10  cd .
+   11  code .
+   12  cd ..
+   13  cd AulaToti
+   14  Cd
+   15  Dir
+   16  cd Toti_Neon
+   17  cd AulaToti
+   18  code .
+   19  cd Exercicio
+   20  code .
+   21  git clone https://github.com/MartaTonet/Aula-Versionamento
+   22  ls
+   23  code .
+   24  git pull
+   25  cd ..
+   26  cd Aula_2309
+   27  ls
+   28  cd Aula-Versionamento/
+   29  code .
+   30  git config --global user.name "Mariana"
+   31  git config --global user.email "marimontana@gmail.com"
+   32  git config user.name
+   33  cd documents
+   34  ls
+   35  cd Toti_Neon
+   36  git init
+   37  git estatus
+   38  git status
+   39  echo"aprendendo a usar o Git>readme.md"
+   40  git status
+   41  git add 'readme.md'
+   42  git add readme.md
+   43  echo"aprendendo a usar o Git> readme.md"
+   44  git commit -m "estou aprendendo"
+   45  git status
+   46  git commit
+   47  git add"estou aprendendo"
+   48  echo 'arquivo'> participante.txt 
+   49  git status
+   50  git commit -am "alteração"
+   51  git add participante.txt
+   52  git status
+   53  git commit -m'adicione arquivo participante.txt'
+   54  git status
+   55  history>Aula3.txt
