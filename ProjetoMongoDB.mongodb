@@ -1,0 +1,103 @@
+//Criação da Database
+//dos pontos 1-6 foram feitos por Mariana 
+//do 7-12 por Juel
+use ('ProjetoMongoDB')
+
+//Criação das Collection
+
+db.createCollection('Filmes')
+
+//adicionar documents ao Collection
+
+db.Filmes.insertOne({ NOME:"Duna", DIRETOR:"Denis Villeuneve", ELENCO:"Timothée Chalamet,Rebecca Ferguson,Zendaya", ANO:2021, PRÊMIOS:0})
+
+db.Filmes.insert({ NOME:"Central do Brasil", DIRETOR:"Walter Salles", ELENCO:"Fernanda Montenegro,Vinicius de Oliveira", ANO:1998, PRÊMIOS:20})
+
+db.Filmes.insert({ NOME:"Cidade dos Sonhos",DIRETOR:"David Lynch", ELENCO:"Naomi Watts, Laura Elena Harring", ANO:2001, PRÊMIOS:18 }) 
+
+db.Filmes.insert({ NOME:"King Kong", DIRETOR:"Peter Jackson", ELENCO:"Naomi Watts, Jack Black, Adrien Brody", ANO:2005, PRÊMIOS:10})
+
+db.Filmes.insert({NOME:"Bela Vingança", DIRETOR:"Emerald Fennel", ELENCO:"Carey Mulligan,Bo Burnham", ANO:2020, PRÊMIOS:22})
+
+db.Filmes.insert({NOME:"SDA: A Sociedade do Anel", DIRETOR:"Peter Jackson", ELENCO:"Elijah Wood, Ian McKellen, Liv Tyler", ANO:2001, PRÊMIOS:15})
+
+db.Filmes.insert({ NOME:"Shrek", DIRETOR:"Andrew Adamson, vicky Jenson", ELENCO:"Mike Myers, Eddie Murphy, Cameron Diaz", ANO:2001, PRÊMIOS:10})
+
+db.Filmes.insert({ NOME:"Cidade de Deus", DIRETOR:"Fernando Meirelles, Kátia Luind", ELENCO:"Alexandre Rodrigues, Leandro Firmino da Hora", ANO:2002, PRÊMIOS:15})
+
+db.Filmes.insert({ NOME:"Pânico", DIRETOR:"Wes Craven", ELENCO:"Neve Campbell, Courtney Cox, David Arquette", ANO:1996, PRÊMIOS:6})
+
+// 2. Busque filmes lançados entre 1997 e 2004.
+
+db.Filmes.find({ $or: [ {ANO: { $gte: 1997}}, {ANO : { $lte: 2004}}]})
+
+//mostra o primeiro documento da collection
+
+db.Filmes.find()
+
+//mostra a collection que foi criada.
+
+show collections
+
+// 3. Busque filmes de 2001 ou que comecem com a letra D.
+
+db.Filmes.find({NOME: { $elemMatch: {NOME:/D/}}}).pretty()
+
+// 4. Busque filmes lançados dirigidos pelo Peter Jackson ou pelo Walter Salles usando $in.
+
+db.Filmes.find({"DIRETOR": {$in:["Peter Jackson","Walter Salles"]}}).pretty()
+
+// 5. Busque filmes lançados entre 2002 e 2021 e que contenham as atrizes Naomi Watts ou Carey Mulligan.
+
+db.Filmes.find({
+    $and:[ 
+            { $or: [ { ANO: { $gte: 2002 }}, { ANO: { $lte: 2021}}]},
+            { $or: [ { ELENCO: "Naomi Watts"}, { ELENCO: "Carey Mulligan"}]}
+        ]
+        })
+
+// 6. Busque todos os filmes que não sejam entre 2001 e 2005.
+
+db.Filmes.find({ ANO:{$ne:[2001,2005]}})
+
+//Busque filmes lançados entre 1997 e 2004
+db.filmes.find().pretty()
+//Busque filmes de 2001 ou que comecem com a letra D.
+db.filmes.find(
+  { ano:{
+      $gte:"1997", $lte:"2010" }
+    }).sort({ano:1})
+//Busque filmes lançados dirigidos pelo Peter Jackson ou pelo Walter Salles usando $in.
+    db.filmes.find(
+  { $or: [ {ano:"2001"},
+      {nome: /^D/} ] } )
+//Busque filmes lançados entre 2002 e 2021 e que contenham as atrizes Naomi Watts ou Carey Mulligan.
+db.filmes.find(
+  { diretor:{ $in:["Peter Jackson", "Walter Salles"]
+      } })
+//Busque todos os filmes que não sejam entre 2001 e 2005.
+db.filmes.find({
+    $and: [ { $or: [{ano:{$gte: "2002"}}, {ano:{$lte: "2021"}}] },
+        { $or: [{elenco:{$eq: "Naomi Watts"}}, {elenco:{$eq: "Carey Mulligan"}}]}
+         ] })
+//Conte quantos filmes foram lançados em 2001.
+db.filmes.find({
+  ano:{ $not:{ $gte:"2001", 
+     $lte:"2005" } } }).sort({ ano: 1 })
+//Selecione apenas o elenco numa distinct.
+db.filmes.distinct("elenco"),
+//Selecione os filmes lançados em 2001, apresentando seu nome e diretor apenas, em ordem decrescente, limitando a dois resultados.
+db.filmes.find({},{ano:"2001",diretor:1, nome:1}).limit(2).sort({nome:-1}),
+//Crie uma index usando o ano como referência exibindo o index criado
+db.filmes.createIndex({ano:2},{name:"Todos os anos dos filmes"}), 
+//Some os prêmios de todos os filmes
+db.filmes.aggregate([
+    { $group: {_id:"",premios:{$sum:"$premios"}
+        }}, { $project: {"total de Premios":"$premios"}} ])
+//Na coleção `sample_mflix` do Mongo Atlas DB, crie uma consulta que retorne os filmes com os seus comentários utilizando o estágio de agrupamento (e.g.: `$lookup`).
+use("sample_mflix")
+db.comments.aggregate([
+  {$lookup: { from:"movies",
+    localField:"movie_id",
+    foreignField:"_id",as:"Filmes"} } ])
+    
